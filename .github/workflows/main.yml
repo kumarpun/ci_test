@@ -24,8 +24,8 @@ jobs:
 
     - name: Failing job Tests
       env:
-        TP_API_KEY: ${{ secrets.TP_API_KEY }}
-        APPLICATION_URL: ${{ secrets.APPLICATION_URL }} 
+        TP_API_KEY: O5E6O2QEBP7Ycf03FVKYz8OZYoOCXonZHYLwurGHKKU1
+        APPLICATION_URL: http://staging.enthu.com/
         JOB_ID: 1vCI1WAo7U6X7Z0Oh4oMwQ
       run: |
         envsubst < .github/ci/docker-compose.yml > docker-compose.yml

@@ -7,10 +7,10 @@ services:
       - chrome
       # - firefox
     environment:
-      TP_API_KEY: "${TP_API_KEY}"
-      TP_AGENT_ALIAS: "GitHub Action Agent"
+      TP_API_KEY: "O5E6O2QEBP7Ycf03FVKYz8OZYoOCXonZHYLwurGHKKU1"
+      TP_AGENT_ALIAS: "kumar GitHub Action Agent"
       TP_JOB_ID: "${JOB_ID}"
-      TP_JOB_PARAMS: '"jobParameters" : { "browsers" : ["Chrome"], "testParameters": [{ "data": [{ "ApplicationURL": "${APPLICATION_URL}"}]}]}'
+      TP_JOB_PARAMS: '"jobParameters" : { "browsers" : ["Chrome"], "testParameters": [{ "data": [{ "ApplicationURL": "http://staging.enthu.com/"}]}]}'
       TP_AGENT_TEMP: "true"
       TP_EXECUTION_ALIAS: "GitHub"
       #TP_SDK_PORT: "8686"
