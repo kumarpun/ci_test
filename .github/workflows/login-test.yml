@@ -1,0 +1,39 @@
+# if [ $RESULT='Failed' ]; then echo "login test failed" && cat ${TEST_RESULT}/login${EXECUTION_ID}.json | jq && exit 1; else echo "Test passed"; fi
+# This is a basic workflow to help you get started with Actions
+
+name: Login Tests
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@main
+
+    - name: Run testProject Agent for Login Tests
+      env:
+        TP_API_KEY: ${{ secrets.TP_API_KEY }} # < Let Secrets handle your keys
+        APPLICATION_URL: ${{ secrets.APPLICATION_URL }}
+        JOB_ID: Q9WdIN3EEUyE437qx6fA9g # User login test
+      run: |
+        envsubst < .github/ci/docker-compose.yml > docker-compose.yml
+        export TEST_RESULT=".github/testresults"
+        EXECUTION_STRING=$(docker-compose -f docker-compose.yml up --abort-on-container-exit | grep 'Downloaded execution package')
+        EXECUTION_ID=`echo ${EXECUTION_STRING##* }`
+        curl -X GET "https://api.testproject.io/v2/projects/${{ secrets.TP_PROJECT_ID }}/jobs/${JOB_ID}/reports/${EXECUTION_ID}?details=true&format=TestProject" -H "accept: application/json" -H "Authorization: ${{ secrets.TP_API_KEY }}" | jq > ${TEST_RESULT}/login${EXECUTION_ID}.json
+        RESULT=$(jq .resultType ${TEST_RESULT}/login${EXECUTION_ID}.json | sed 's/^.//;s/.$//')
+        echo $RESULT
+        if [ $RESULT = 'Failed' ]; then echo "login test failed" && cat ${TEST_RESULT}/login${EXECUTION_ID}.json | jq && exit 1; else echo "Test passed"; fi
+        rm ${TEST_RESULT}/login${EXECUTION_ID}.json
