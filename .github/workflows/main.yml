@@ -32,7 +32,7 @@ jobs:
         export TEST_RESULT=".github/testresults"
         EXECUTION_STRING=$(docker-compose -f docker-compose.yml up --abort-on-container-exit | grep 'Downloaded execution package')
         EXECUTION_ID=`echo ${EXECUTION_STRING##* }`
-        curl -X GET "https://api.testproject.io/v2/projects/yzcAM4iBK0aMyCGgywpXgw/jobs/${JOB_ID}/reports/${EXECUTION_ID}?details=true&format=TestProject" -H "accept: application/json" -H "Authorization: ${{ secrets.TP_API_KEY }}" | jq > ${TEST_RESULT}/login${EXECUTION_ID}.json
+        curl -X GET "https://api.testproject.io/v2/projects/yzcAM4iBK0aMyCGgywpXgw/jobs/${JOB_ID}/reports/${EXECUTION_ID}?details=true&format=TestProject" -H "accept: application/json" -H "Authorization: O5E6O2QEBP7Ycf03FVKYz8OZYoOCXonZHYLwurGHKKU1" | jq > ${TEST_RESULT}/login${EXECUTION_ID}.json
         RESULT=$(jq .resultType ${TEST_RESULT}/login${EXECUTION_ID}.json | sed 's/^.//;s/.$//')
         echo $RESULT
         if [ $RESULT = 'Failed' ]; then echo "Always failing test failed" && cat ${TEST_RESULT}/login${EXECUTION_ID}.json | jq && exit 1; else echo "Test passed"; fi
